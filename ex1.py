@@ -1,9 +1,12 @@
 class Point:
+    "Description of the CLASS"
     color = 'red'
     circle = 2
 
 a = Point()
 b = Point()
+
+print(Point.__doc__)
 
 a.color, a.circle = 'blue', 4 # local attribute of the object 'a'
 print(a.__dict__) # {'color': 'blue', 'circle': 4}
