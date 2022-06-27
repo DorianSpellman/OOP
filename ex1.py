@@ -38,3 +38,11 @@ b.x, b.y = 4, 4
 print(a.__dict__, b.__dict__, sep='\n')
 
 
+class Person:
+    name = 'Сергей Балакирев'
+    job = 'Программист'
+    city = 'Москва'
+    
+p1 = Person()
+
+print('job' in p1.__dict__)
