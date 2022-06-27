@@ -39,9 +39,9 @@ print(a.__dict__, b.__dict__, sep='\n')
 
 
 class Person:
-    name = 'Сергей Балакирев'
-    job = 'Программист'
-    city = 'Москва'
+    name = 'Dorian'
+    job = 'Creator'
+    city = 'Neverland'
     
 p1 = Person()
 
