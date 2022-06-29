@@ -1,5 +1,6 @@
 class Point:
     "Description of the CLASS"
+    
     color = 'red'
     circle = 2
 
@@ -36,6 +37,9 @@ print(a.circle) # property 'circle' get value from Point
 a.x, a.y = 1, 1
 b.x, b.y = 4, 4
 print(a.__dict__, b.__dict__, sep='\n')
+
+
+# ***************************************
 
 
 class Person:
