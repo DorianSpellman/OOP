@@ -76,28 +76,86 @@ graph_1.draw()
 
 # ***************************************
 
-import sys
+# import sys
 
-class StreamData:
-    def create(self, fields, lst_values):
-        if len(fields) != len(lst_values):
-            return False
+# class StreamData:
+#     def create(self, fields, lst_values):
+#         if len(fields) != len(lst_values):
+#             return False
         
-        for ind, name in enumerate(fields):
-            setattr(self, name, lst_values[ind]) # creating LOCAL property for the object <name> with value <lst_values[ind]>
+#         for ind, name in enumerate(fields):
+#             setattr(self, name, lst_values[ind]) # creating LOCAL property for the object <name> with value <lst_values[ind]>
             
-        return True
+#         return True
     
 
-class StreamReader:
-    FIELDS = ('id', 'title', 'pages')
+# class StreamReader:
+#     FIELDS = ('id', 'title', 'pages')
 
-    def readlines(self):
-        lst_in = list(map(str.strip, sys.stdin.readlines()))  # считывание списка строк из входного потока
-        sd = StreamData()
-        res = sd.create(self.FIELDS, lst_in)
-        return sd, res
+#     def readlines(self):
+#         lst_in = list(map(str.strip, sys.stdin.readlines()))  # считывание списка строк из входного потока
+#         sd = StreamData()
+#         res = sd.create(self.FIELDS, lst_in)
+#         return sd, res
 
 
-sr = StreamReader()
-data, result = sr.readlines()
+# sr = StreamReader()
+# data, result = sr.readlines()
+
+# ***************************************
+
+import sys
+
+#lst_in = list(map(str.strip, sys.stdin.readlines()))  # считывание списка строк из входного потока
+lst_in = ['1 Сергей 35 120000', '2 Федор 23 12000', '3 Иван 13 1200']
+
+class DataBase:
+    lst_data = []
+    FIELDS = ('id', 'name', 'old', 'salary')
+
+    def insert(self, data):
+        for x in data:
+            self.lst_data.append(dict(zip(self.FIELDS, x.split())))
+    
+    def select(self, a, b):
+        return self.lst_data[a:b+1]
+
+
+
+db = DataBase()
+db.insert(lst_in)
+print(db.select(1, 2))
+
+
+# ***************************************
+
+class Translator:
+
+    def add(self, eng, rus):
+        if 'words' not in self.__dict__:
+            self.words = dict()
+
+        self.words.setdefault(eng, [])
+        self.words[eng].append(rus)
+
+    def remove(self, eng):
+        self.words.pop(eng, 'Not exist')
+
+    def translate(self, eng):
+        return self.words[eng]
+
+tr = Translator()
+
+tr.add("tree", "дерево")
+tr.add("car", "машина")
+tr.add("car", "автомобиль")
+tr.add("leaf", "лист")
+tr.add("river", "река")
+tr.add("go", "идти")
+tr.add("go", "ехать")
+tr.add("go", "ходить")
+tr.add("milk", "молоко")
+
+tr.remove('car)')
+
+print(*tr.translate('go'))
