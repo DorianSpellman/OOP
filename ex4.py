@@ -86,12 +86,11 @@ class Dialog:
     def __new__(cls, name, *args, **kwargs):
         if TYPE_OS == 1: # если тип ОС - 1, то создаём объект класса Windows
             Dialog.obj = super().__new__(DialogWindows)
-            setattr(Dialog.obj, 'name', name) # в качестве локального атрибута (свойства) передаём название
 
         if TYPE_OS != 1:
             Dialog.obj = super().__new__(DialogLinux)
-            setattr(Dialog.obj, 'name', name)
-
+        
+        setattr(Dialog.obj, 'name', name) # в качестве локального атрибута (свойства) передаём название
         return Dialog.obj
 
 obj = Dialog('Henry')
@@ -99,5 +98,44 @@ obj = Dialog('Henry')
 print(isinstance(obj, DialogWindows)) # True
 print(obj.__dict__)
 
+print('*************************************************')
+
+class Point:
+
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    def clone(self):
+        return Point(self.x, self.y) # клонирование объекта
 
 
+pt = Point(5, 5)
+pt_clone = pt.clone()
+
+print(pt.__dict__)
+print(pt_clone.__dict__)
+
+print('*************************************************')
+
+class Factory:
+    def build_sequence(self):
+        return list()
+    
+    def build_number(self, string):
+        return float(string)    
+
+class Loader:
+    def parse_format(self, string, factory):
+        seq = factory.build_sequence()
+        for sub in string.split(","):
+            item = factory.build_number(sub)
+            seq.append(item)
+
+        return seq
+
+
+# эти строчки не менять!
+ld = Loader()
+res = ld.parse_format("4, 5, -6.5", Factory())
+print(res)
