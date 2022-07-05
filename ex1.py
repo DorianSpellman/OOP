@@ -1,3 +1,7 @@
+'''
+Классы и объекты. Атрибуты классов и объектов
+'''
+
 class Point:
     "Description of the CLASS"
     

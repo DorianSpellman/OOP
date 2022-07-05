@@ -1,3 +1,7 @@
+'''
+Инициализатор __init__ и финализатор __del__
+'''
+
 from random import *
 import string
 

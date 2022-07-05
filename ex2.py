@@ -1,3 +1,7 @@
+'''
+Методы классов. Параметр self
+'''
+
 class Point:
 
     color = 'red'
