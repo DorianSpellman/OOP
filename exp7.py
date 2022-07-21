@@ -235,14 +235,44 @@ class LineTo:
 p = PathLines(LineTo(1, 2))
 print(p.get_length())  # 2.23606797749979
 p.add_line(LineTo(10, 20))
-p.add_line(LineTo(5, 17))
-print(p.get_length())  # 28.191631669843197
-m = p.get_path()
-print(all(isinstance(i, LineTo) for i in m) and len(m) == 3)  # True
+p.add_line(LineTo(5, 15))
+print(p.get_length())  # 29.431747586863374
 
-h = PathLines(LineTo(4, 8), LineTo(-10, 30), LineTo(14, 2))
-print(h.get_length())  # 71.8992593599813
+h = PathLines(LineTo(4, 4), LineTo(-10, 30), LineTo(15, 5))
+print(h.get_length())  # 70.54183942928657
 
 k = PathLines()
 print(k.get_length())  # 0
 print(k.get_path())  # []
+
+print('*************************************************')
+
+class PhoneBook:
+
+    def __init__(self):
+        self.book = list()
+        
+    def add_phone(self, phone):
+        self.book.append(phone)
+
+    def remove_phone(self, indx):
+        self.book.pop(indx)
+
+    def get_phone_list(self):
+        return self.book
+
+class PhoneNumber:
+
+    def __init__(self, number, name):
+        if str(number).isdigit() and len(str(number)) == 11:
+            self.number = number
+        else:
+            print('The number is incorrect')
+        self.fio = name
+       
+book1 = PhoneBook()
+book1.add_phone(PhoneNumber(89121752515, "Will Graham"))
+book1.add_phone(PhoneNumber(89831440605, "Jose"))
+
+for contact in book1.get_phone_list():
+    print(contact.number, contact.fio)
