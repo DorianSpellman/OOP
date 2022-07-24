@@ -18,6 +18,7 @@
 присутствует метод __get__, но отсутствует метод __set__.
 """
 
+from jinja2 import pass_context
 from jsonschema import Validator
 
 
@@ -173,3 +174,170 @@ rf.show()
 print(rf.get_fields())
 rf = RegisterForm('B0', 42, 'BuzFuz')
 print(rf.__dict__)
+
+print('*************************************************')
+
+class StringVal:
+
+    def __init__(self, min_length, max_length):
+        self.min_length = min_length
+        self.max_length = max_length
+
+    def __set_name__(self, owner, name):
+        self.name = f'_{name}'
+    
+    def __set__(self, instance, value):
+        if type(value) == str and self.min_length <= len(value) <= self.max_length:
+            setattr(instance, self.name, value)
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name)
+
+class PriceValue:
+
+    def __init__(self, max_value):
+        self.max_value = max_value
+
+    def __set_name__(self, owner, name):
+        self.name = f'_{name}'
+
+    def __set__(self, instance, value):
+        if type(value) in (int, float) and 0 <= value <= self.max_value:
+            setattr(instance, self.name, value)
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name)
+
+
+class SuperShop:
+
+    def __init__(self, name):
+        self.name = name
+        self.goods = []
+
+    def add_product(self, product):
+        self.goods.append(product)
+
+    def remove_product(self, product):
+        self.goods.remove(product)
+
+class Product:
+
+    name = StringVal(min_length=2, max_length=50)
+    price = PriceValue(max_value=10000)
+
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+
+shop = SuperShop("У Балакирева")
+shop.add_product(Product("Курс по Python", 0))
+shop.add_product(Product("Курс по Python ООП", 2000))
+for p in shop.goods:
+    print(f"{p.name}: {p.price}")
+
+print('*************************************************')
+
+class Bag:
+    
+    @property  # объект-свойство для доступа к локальному приватному атрибуту __things (только для считывания, не записи)
+    def things(self):
+        return self.__things
+
+    def __init__(self, max_weight):
+        if type(max_weight) == int:
+            self.max_weigth = max_weight
+            self.__things = []
+
+    def add_thing(self, thing):
+        # добавление возможно, если суммарный вес (max_weight) не будет превышен, иначе добавление не происходит)
+        if self.get_total_weight() + thing.weight <= self.max_weigth:
+            self.things.append(thing)
+        
+    def remove_thing(self, indx):
+        self.things.pop(indx)
+        
+    def get_total_weight(self):
+        s = 0
+        for thing in self.things:
+            s += thing.weight
+        return s
+
+    
+class Thing:
+
+    def __init__(self, name, weight):
+        if type(name) == str and type(weight):
+            self.name = name
+            self.weight = weight
+
+bag = Bag(1000)
+bag.add_thing(Thing("Книга", 100))
+bag.add_thing(Thing("Свитер", 500))
+bag.add_thing(Thing("Спички", 20))
+bag.add_thing(Thing("Бумага", 100))
+w = bag.get_total_weight()
+for t in bag.things:
+    print(f"{t.name}: {t.weight}")
+
+print('*************************************************')
+
+class TVProgram:
+
+    def __init__(self, name):
+        if type(name) is str:
+            self.name = name
+            self.items = []
+
+    def add_telecast(self, title):
+        self.items.append(title)
+    
+    def remove_telecast(self, indx):
+        for telecast in self.items:
+            if telecast.id == indx:
+                self.items.remove(telecast)
+        
+class Telecast:
+
+    def __init__(self, id, name, duration):
+        self.__id = id
+        self.__name = name
+        self.__duration = duration
+
+    @property
+    def id(self):
+        return self.__id
+    
+    @id.setter
+    def id(self, id):
+        if type(id) is int:
+            self.__id = id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        if type(name) is str:
+            self.__name = name
+    
+    @property
+    def duration(self):
+        return self.__duration
+
+    @duration.setter
+    def duration(self, duration):
+        self.__duration = duration
+
+pr = TVProgram("National Geographic")
+pr.add_telecast(Telecast(1, "New Zeland", 10000))
+pr.add_telecast(Telecast(2, "Brazil", 2000))
+pr.add_telecast(Telecast(3, "The Earth", 20))
+pr.remove_telecast(3)
+for t in pr.items:
+    print(f"{t.name}: {t.duration}")
+
+    
+    
