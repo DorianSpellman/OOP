@@ -340,4 +340,3 @@ for t in pr.items:
     print(f"{t.name}: {t.duration}")
 
     
-    
