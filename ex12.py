@@ -9,6 +9,9 @@ __mod__() - %
 __i...__() - += -= ...
 '''
 
+from logging.handlers import TimedRotatingFileHandler
+
+
 class Clock:
 
     __DAY = 86400 # число секунд в одном дне
@@ -240,5 +243,303 @@ lst /= 0.5 # [6.0, 3.0, 36.0]
 print(lst)
 
 print('*************************************************')
+
+# односвязный список
+
+class StackObj:
+
+    def __init__(self, data: str):
+        self.__data = data
+        self.__next = None
+
+    @property
+    def data(self):
+        return self.__data
+
+    @property
+    def next(self):
+        return self.__next
+    @next.setter
+    def next(self, obj):
+        self.__next = obj
+
+
+class Stack:
+
+    def __init__(self, top=None):
+        self.top = top
+        self.__last = None # ссылка на последний объект списка
+
+    def push_back(self, obj): # добавление объекта класса StackObj в конец односвязного списка
+        if self.top is None:
+            self.top = obj
+
+        if self.__last: # если последний объект есть
+            self.__last.next = obj # следующий за последним объектом
+        
+        self.__last = obj
+
+    def pop_back(self): # удаление последнего объекта из односвязного списка
+        top = self.top
+        if top is None: # если в списке нет объектов
+            return
+        
+        while top.next and top.next != self.__last: # пока ссылка на следующий объект != None И следующий != последнему (доходим до предпоследнего объекта)
+            top = top.next
+
+        if self.top == self.__last: # если это ед. объект в списке (первый и последний совпадают)
+            self.top = self.__last = None
+
+        else:
+            top.next = None
+            self.__last = top
+
+    def __add__(self, obj):
+        self.push_back(obj)
+        return self
+
+    def __iadd__(self, obj):
+        return self.__add__(obj)
+
+    def __mul__(self, obj):
+        for x in obj:
+            self.push_back(StackObj(x))
+        return self
+
+    def __imul__(self, obj):
+        return self.__mul__(obj)
+
+    def show(self):
+        outs = ''
+        current = self.top
+        if not current: return None
+
+        while current.next:
+            outs += f'{current.data} -> '
+            current = current.next
+        outs += current.data
+        print(outs)
+
+
+
+h = StackObj('5')
+print(h._StackObj__data) # 5
+st = Stack()
+st.push_back(StackObj('1'))
+st.push_back(StackObj('2'))
+st.push_back(StackObj('3'))
+st.show() # 1 -> 2 -> 3
+st = st + StackObj('4')
+st += StackObj('5')
+st.show() # 1 -> 2 -> 3 -> 4 -> 5
+st = st * [str(i) for i in range(6, 9)]
+st *= [str(i) for i in range(9, 12)]
+st.show() # 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+
+
+print('*************************************************')
+
+class Book:
+
+    def __init__(self, title: str, author: str, year: int):
+        self.title = title
+        self.author = author
+        self.year = year
+
+    def __str__(self) -> str:
+        return f'"{self.title}"'
+
+class Lib:
+
+    def __init__(self):
+        self.book_list = list()
+
+    def __add__(self, book):
+        self.book_list.append(book)
+        return self
+
+    def __sub__(self, book):
+        if isinstance(book, Book):
+            if book in self.book_list:
+                self.book_list.remove(book)
+                                        
+        if isinstance(book, int):
+            if book < self.__len__():
+                self.book_list.pop(book)
+        
+        return self
+
+    def __len__(self):
+        return len(self.book_list)
+
+    def __str__(self) -> str:
+        books = ''
+        for i in self.book_list:
+            books += i.title + ' '
+        return books
+
+lib = Lib()
+lib = lib + Book('Процесс', 'Кафка', 2020) # добавление новой книги в библиотеку
+lib += Book('Три товарища', 'Ремарк', 2021)
+lib += Book('Бесы', 'Достоевский', 2022)
+lib += Book('1984', 'Оруэлл', 2022)
+print(lib)
+
+lib = lib - Book('Процесс', 'Кафка', 2020) # удаление книги book из библиотеки (удаление происходит по ранее созданному объекту book класса Book)
+lib -= Book('Три товарища', 'Ремарк', 2021)
+print(lib)
+
+lib = lib - 1 # удаление книги по ее порядковому номеру (индексу: отсчет начинается с нуля)
+lib -= 0
+print(lib)
+
+print('*************************************************')
+
+class Item:
+
+    def __init__(self, name, money):
+        self.name = name
+        if type(money) in (int, float):
+            self.money = money
+    
+    def __add__(self, item):
+        if type(item) == Item:
+            return self.money + item.money
+            
+        if type(item) in (int, float):
+            return item + self.money              
+
+    def __radd__(self, item):
+        return self + item
+
+class Budget:
+
+    def __init__(self):
+        self.budget = []
+    
+    def add_item(self, item):
+        self.budget.append(item)
+
+    def remove_item(self, indx):
+        del self.budget[indx]
+
+    def get_items(self):
+        return self.budget
+
+my_budget = Budget()
+my_budget.add_item(Item("Курс по Python ООП", 2000))
+my_budget.add_item(Item("Курс по Django", 5000.01))
+my_budget.add_item(Item("Курс по NumPy", 0))
+my_budget.add_item(Item("Курс по C++", 1500.10))
+
+# вычисление общих расходов
+s = 0
+for x in my_budget.get_items():
+    s = s + x
+print(s)
+
+print('*************************************************')
+
+class Box3D:
+
+    def __init__(self, width, height, depth):
+        self.width = width
+        self.height = height
+        self.depth = depth
+
+    def __str__(self) -> str:
+        return f'w={self.width} h={self.height} d={self.depth}'
+
+    def __add__(self, other):
+        w = self.width + other.width
+        h = self.height + other.height
+        d = self.depth + other.depth
+        return Box3D(w, h, d)
+
+    def __sub__(self, other):
+        w = self.width - other.width
+        h = self.height - other.height
+        d = self.depth - other.depth
+        return Box3D(w, h, d)
+
+    def __mul__(self, num):
+        w = self.width * num
+        h = self.height * num
+        d = self.depth * num
+        return Box3D(w, h, d)
+
+    def __rmul__(self, num):
+        return self * num
+
+    def __floordiv__(self, num):
+        w = self.width // num
+        h = self.height // num
+        d = self.depth // num
+        return Box3D(w, h, d)
+
+    def __mod__(self, num):
+        w = self.width % num
+        h = self.height % num
+        d = self.depth % num
+        return Box3D(w, h, d)    
+
+box1 = Box3D(1, 2, 3)
+box2 = Box3D(2, 4, 6)
+
+box = box1 + box2 # Box3D: width=3, height=6, depth=9
+print(box)
+box = box2 - box1 # Box3D: width=1, height=2, depth=3
+box = box1 * 2    # Box3D: width=2, height=4, depth=6
+box = 3 * box2    # Box3D: width=6, height=12, depth=18
+box = box1 // 2   # Box3D: width=0, height=1, depth=1 
+box = box2 % 3    # Box3D: width=2, height=1, depth=0
+print(box)
+
+print('*************************************************')
+
+class MaxPooling:
+
+    def __init__(self, step=(2, 2), size=(2, 2)):
+        self.step = step # шаг смещения окна по Г и В
+        self.size = size  # размер окна
+
+    def __call__(self, matrix):
+        if not all(map(lambda x: len(x) == len(matrix), matrix)):
+            raise ValueError("Неверный формат для первого параметра matrix.")
+        for i in matrix:
+            for j in i:
+                if type(j) not in (int, float):
+                    raise ValueError("Неверный формат для первого параметра matrix.")
+        else:
+            row_step = self.step[0] # 2 
+            col_step = self.step[1] # 2
+
+            row_size = self.size[0] # 2
+            col_size = self.size[1] # 2
+ 
+            result_table = list()
+
+            for i in range(0, len(matrix), row_step):
+                result_row = list()
+
+                for j in range(0, len(matrix[0]), col_step): # проходимся по строкам
+                    if i+row_size <= len(matrix) and j+col_size <= len(matrix[0]): 
+                        window = [x for row in matrix[i:i+row_size] for x in row[j:j+col_size]] # матрицу подгоняем под удобную для работы с нужным размером окна
+                        №print(max(window))
+                        result_row.append(max(window)) # добавляем наибольшее значение в окне в список строки
+                if result_row:
+                    #print(result_row)
+                    result_table.append(result_row)
+
+            return result_table
+                    
+
+mp = MaxPooling(step=(2, 2), size=(2,2))
+res = mp([[1, 2, 3, 4], 
+          [5, 6, 7, 8], 
+          [9, 8, 7, 6], 
+          [5, 4, 3, 2]])    
+
+print(res) # [[6, 8], [9, 7]]
 
 
