@@ -5,7 +5,6 @@
 from random import *
 import string
 
-
 class Point:
 
     color = 'red'

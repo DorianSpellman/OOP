@@ -463,4 +463,3 @@ my_water.add_filter(2, Calcium(time.time())) # добавление в "чужо
 my_water.remove_filter(3)
 print(list(my_water.filters.values())) # [obj, obj, None]
 
-

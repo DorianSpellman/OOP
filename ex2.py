@@ -15,7 +15,6 @@ class Point:
         return (self.x, self.y) # return tuple with coords
 
 
-
 pt = Point()  
 pt2 = Point()
 

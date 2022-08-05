@@ -277,4 +277,3 @@ book1.add_phone(PhoneNumber(89831440605, "Jose"))
 for contact in book1.get_phone_list():
     print(contact.number, contact.fio)
 
-

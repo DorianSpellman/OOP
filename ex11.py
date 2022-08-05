@@ -171,7 +171,7 @@ print(vector3D.get_coords()) # (3, -5.6, 8)
 
 a, b, c = vector3D.get_coords()
 vector3D.set_coords(3, -5.6, 8, 10, 11) # ошибки быть не должно, последние две координаты игнорируются
-print(vector3D.get_coords()) # 
+print(vector3D.get_coords()) # (3, -5.6, 8)
 
 vector3D.set_coords(1, 2) # ошибки быть не должно, меняются только первые две координаты
 print(vector3D.get_coords())
