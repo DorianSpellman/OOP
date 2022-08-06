@@ -375,18 +375,23 @@ class Lib:
     def __str__(self) -> str:
         books = ''
         for i in self.book_list:
-            books += i.title + ' '
-        return books
+            books += i.title + ' | '
+        return books + f'\n------'
 
 lib = Lib()
-lib = lib + Book('Процесс', 'Кафка', 2020) # добавление новой книги в библиотеку
-lib += Book('Три товарища', 'Ремарк', 2021)
-lib += Book('Бесы', 'Достоевский', 2022)
-lib += Book('1984', 'Оруэлл', 2022)
+book1 = Book('Процесс', 'Кафка', 2020)
+book2 = Book('Три товарища', 'Ремарк', 2021)
+book3 = Book('Бесы', 'Достоевский', 2022)
+book4 = Book('1984', 'Оруэлл', 2022)
+
+lib = lib + book1 # добавление новой книги в библиотеку
+lib += book2
+lib += book3
+lib += book4
 print(lib)
 
-lib = lib - Book('Процесс', 'Кафка', 2020) # удаление книги book из библиотеки (удаление происходит по ранее созданному объекту book класса Book)
-lib -= Book('Три товарища', 'Ремарк', 2021)
+lib = lib - book1 # удаление книги book из библиотеки (удаление происходит по ранее созданному объекту book класса Book)
+lib -= book2
 print(lib)
 
 lib = lib - 1 # удаление книги по ее порядковому номеру (индексу: отсчет начинается с нуля)
@@ -525,7 +530,7 @@ class MaxPooling:
                 for j in range(0, len(matrix[0]), col_step): # проходимся по строкам
                     if i+row_size <= len(matrix) and j+col_size <= len(matrix[0]): 
                         window = [x for row in matrix[i:i+row_size] for x in row[j:j+col_size]] # матрицу подгоняем под удобную для работы с нужным размером окна
-                        №print(max(window))
+                        #print(max(window))
                         result_row.append(max(window)) # добавляем наибольшее значение в окне в список строки
                 if result_row:
                     #print(result_row)
