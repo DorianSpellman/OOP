@@ -9,9 +9,6 @@ __mod__() - %
 __i...__() - += -= ...
 '''
 
-from logging.handlers import TimedRotatingFileHandler
-
-
 class Clock:
 
     __DAY = 86400 # число секунд в одном дне
