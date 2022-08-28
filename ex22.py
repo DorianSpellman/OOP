@@ -467,9 +467,4 @@ class FishFood(Food):
 bf = BreadFood("Бородинский хлеб", 34.5, 512, False)
 sf = SoupFood("Tom-Yam", 520, 890.5, False)
 ff = FishFood("Консерва рыбная", 340, 1200, "Сёмга")
-a = SoupFood()
-
-
-
-        
 
