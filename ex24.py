@@ -307,7 +307,7 @@ class Linear(Function):
     def _get_function(self, x):
         return self._k * x + self._b
     
-    print('*************************************************')
+print('*************************************************')
 
 class Vertex:
     
