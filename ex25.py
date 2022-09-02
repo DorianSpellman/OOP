@@ -141,3 +141,4 @@ fv = FloatValidator(0, 10.5)
 iv = IntegerValidator(-10, 20)
 lst_out = is_valid([1, 4.5, -10.5, 100, True, 'abc', (1, 2)], validators=[fv, iv])   # [1, 4.5]
 print(lst_out)
+
